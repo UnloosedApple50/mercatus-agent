@@ -6,7 +6,7 @@ import os
 import platform
 import time
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Dict, Optional
 
 from mercatus.db.database import Database, db
 from mercatus.utils.logger import get_logger
@@ -19,9 +19,9 @@ class HealthStatus:
     """Overall system health status."""
     status: str  # "healthy", "degraded", "unhealthy"
     timestamp: float
-    checks: dict[str, dict[str, Any]]
+    checks: Dict[str, Dict[str, Any]]
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "status": self.status,
             "timestamp": self.timestamp,
@@ -32,12 +32,12 @@ class HealthStatus:
 class HealthChecker:
     """Performs comprehensive health checks on all system components."""
 
-    def __init__(self, database: Database | None = None) -> None:
+    def __init__(self, database: Optional[Database] = None) -> None:
         self._db = database or db
 
     async def run_full_check(self) -> HealthStatus:
         """Run all health checks."""
-        checks: dict[str, dict[str, Any]] = {}
+        checks: Dict[str, Dict[str, Any]] = {}
 
         # Database check
         checks["database"] = await self._check_database()
@@ -66,7 +66,7 @@ class HealthChecker:
             checks=checks,
         )
 
-    async def _check_database(self) -> dict[str, Any]:
+    async def _check_database(self) -> Dict[str, Any]:
         """Check database connectivity and integrity."""
         try:
             if not self._db.is_connected:
@@ -82,7 +82,7 @@ class HealthChecker:
         except Exception as e:
             return {"status": "critical", "message": f"Database error: {e}"}
 
-    def _check_disk_space(self) -> dict[str, Any]:
+    def _check_disk_space(self) -> Dict[str, Any]:
         """Check available disk space."""
         try:
             import shutil
@@ -105,7 +105,7 @@ class HealthChecker:
         except Exception:
             return {"status": "unknown", "message": "Could not check disk"}
 
-    def _check_memory(self) -> dict[str, Any]:
+    def _check_memory(self) -> Dict[str, Any]:
         """Check system memory usage."""
         try:
             import psutil
@@ -118,7 +118,7 @@ class HealthChecker:
         except ImportError:
             return {"status": "ok", "message": "psutil not available"}
 
-    async def _check_llm(self) -> dict[str, Any]:
+    async def _check_llm(self) -> Dict[str, Any]:
         """Check LLM service connectivity."""
         from mercatus.models.llm import llm_client
         try:
@@ -131,7 +131,7 @@ class HealthChecker:
         except Exception:
             return {"status": "warning", "message": "LLM check failed"}
 
-    async def get_diagnostics(self) -> dict[str, Any]:
+    async def get_diagnostics(self) -> Dict[str, Any]:
         """Get detailed diagnostic information."""
         return {
             "platform": {

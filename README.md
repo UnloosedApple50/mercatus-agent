@@ -1,138 +1,60 @@
-# Mercatus Agent v2.0
+# Mercatus Agent
 
-A comprehensive Specialized Language Memory Agent for Sales & Trading with real-time dashboard, system monitoring, integrations, and agent training capabilities.
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://docker.com)
 
-## Features
+> A Specialized Language Memory Agent for Sales & Trading.
 
-### Core Capabilities
-- **Multi-Module Agent** — Sales, Trading, and General advisory contexts
-- **Memory System** — Episodic, Semantic, and Working memory
-- **Decision Engine** — Structured decision-making with confidence scoring
-- **Knowledge Base** — Domain-specific facts and rules for sales & trading
-
-### New in v2.0
-- **Real-Time Web Dashboard** — Interactive SPA with live metrics, chat, memory browsing, and system monitoring
-- **System Monitoring** — CPU, RAM, Disk, Network I/O metrics with live charts
-- **Token Throughput Tracking** — Tokens/sec, latency, rolling averages
-- **Integrations System** — Webhooks, API Keys, Slack/Discord/Telegram/Zapier connectors, OAuth
-- **Agent Training** — Feedback collection, replay, and behavioral adaptation
-- **New Tools** — Calculator, Converter, Analyzer, Scheduler, Notifier
-- **Enhanced Security** — Rate limiting, audit logging, CSRF protection, CORS
+Mercatus is a production-ready AI agent that combines persistent memory, local LLM reasoning, and a real-time web dashboard. Runs entirely on your machine — no cloud, no GPU required.
 
 ## Quick Start
 
+### Option 1: One-Line Install (Recommended)
+
 ```bash
-# Install dependencies
+curl -fsSL https://raw.githubusercontent.com/UnloosedApple50/mercatus-agent/main/install.sh | bash
+```
+
+### Option 2: Docker
+
+```bash
+docker-compose up -d
+```
+
+### Option 3: Manual Install
+
+```bash
+git clone https://github.com/UnloosedApple50/mercatus-agent.git
+cd mercatus-agent
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -e .
-
-# Run the server
-python -m mercatus
-
-# Or use the CLI
-mercatus
+python -m mercatus run
 ```
 
-The dashboard will be available at `http://localhost:8585`.
+## Usage
 
-## Dashboard Views
+1. Open http://localhost:8585
+2. Start chatting with the agent
+3. Browse memory, decisions, and knowledge
+4. Export to Obsidian with one click
+5. Configure integrations (Slack, Discord, Telegram)
 
-| View | Description |
-|------|-------------|
-| Dashboard | Real-time system stats, token throughput charts |
-| Chat | Full conversation interface with module selection |
-| Memory | Browse/search episodic, semantic, working memory |
-| Decisions | View decision history with confidence tracking |
-| Knowledge | Browse and add facts/rules |
-| Integrations | Configure webhooks, API keys, external connectors |
-| Training | Submit feedback, run adaptation, replay sessions |
-| System | Real-time machine monitoring with charts |
-| Settings | LLM config, server config, security settings |
+## System Requirements
 
-## API Endpoints
+- Python 3.8 or higher
+- 4GB RAM minimum (8GB recommended)
+- 500MB disk space
+- Optional: Ollama for local LLM (recommended)
 
-### Core
-- `GET /api/v1/health` — Health check
-- `POST /api/v1/chat` — Send a message
-- `POST /api/v1/decisions` — Make a decision
-- `GET /api/v1/memory/episodic` — Retrieve episodic memories
-- `GET /api/v1/memory/semantic` — Retrieve semantic memories
-- `POST /api/v1/memory/semantic` — Add knowledge
-- `DELETE /api/v1/memory/{id}` — Delete a memory
+## Documentation
 
-### System & Metrics
-- `GET /api/v1/system/metrics` — Real-time system metrics
-- `GET /api/v1/system/info` — System information
-- `GET /api/v1/metrics/throughput` — Token throughput metrics
-- `GET /api/v1/metrics/throughput/history` — Historical throughput
-
-### Integrations
-- `GET /api/v1/integrations` — List all integrations
-- `POST /api/v1/integrations/webhooks` — Register webhook
-- `GET /api/v1/integrations/webhooks` — List webhooks
-- `POST /api/v1/integrations/api-keys` — Generate API key
-- `POST /api/v1/integrations/{service}/connect` — Connect service
-- `DELETE /api/v1/integrations/{service}` — Disconnect service
-
-### Training
-- `POST /api/v1/training/feedback` — Submit feedback
-- `GET /api/v1/training/history` — View feedback history
-- `GET /api/v1/training/stats` — Training statistics
-- `POST /api/v1/training/adapt` — Trigger adaptation
-- `POST /api/v1/training/replay/{session_id}` — Replay session
-
-## WebSocket
-
-Connect to `ws://localhost:8585/ws` for real-time updates:
-
-```json
-{"type": "chat", "payload": {"message": "Hello", "module": "general"}}
-{"type": "ping", "payload": {}}
-{"type": "health", "payload": {}}
-{"type": "get_metrics", "payload": {}}
-{"type": "get_system_metrics", "payload": {}}
-```
-
-## Configuration
-
-Environment variables (prefix: `MERCATUS_`):
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `MERCATUS_HOST` | `0.0.0.0` | Server host |
-| `MERCATUS_PORT` | `8585` | Server port |
-| `MERCATUS_LLM_BASE_URL` | `http://localhost:11434/v1` | LLM API URL |
-| `MERCATUS_LLM_MODEL` | `llama3.2` | LLM model name |
-| `MERCATUS_DB_PATH` | `./data/mercatus.db` | Database path |
-| `MERCATUS_LOG_LEVEL` | `INFO` | Logging level |
-| `MERCATUS_RATE_LIMIT` | `100` | Requests per minute |
-| `MERCATUS_MAX_INPUT_LENGTH` | `10000` | Max input characters |
-
-## Architecture
-
-```
-src/mercatus/
-├── core/           # Agent, Memory, Retrieval, Decision engines
-├── db/             # Database layer and migrations
-├── integrations/   # Webhooks, API Keys, Connectors, OAuth
-├── monitor/        # System monitoring and metrics
-├── training/       # Feedback, Replay, Adaptation
-├── tools/          # Calculator, Converter, Analyzer, Scheduler, Notifier
-├── server/         # FastAPI server, WebSocket, static files
-├── models/         # LLM client, configuration
-├── knowledge/      # Domain knowledge base
-└── utils/          # Security, logging utilities
-```
-
-## Testing
-
-```bash
-# Run all tests with coverage
-pytest --cov=mercatus --cov-report=term-missing
-
-# Run specific test module
-pytest tests/test_system.py -v
-```
+- [Installation Guide](docs/INSTALLATION.md)
+- [API Reference](docs/API.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Security](docs/SECURITY.md)
 
 ## License
 
-MIT License
+MIT License - see [LICENSE](LICENSE) for details.

@@ -10,7 +10,7 @@ import zipfile
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, List, Optional
 
 from mercatus.db.database import Database, db
 from mercatus.utils.logger import get_logger
@@ -25,7 +25,7 @@ class BackupInfo:
     created_at: str
     size_bytes: int
     description: str = ""
-    tags: list[str] = field(default_factory=list)
+    tags: List[str] = field(default_factory=list)
 
 
 class BackupManager:
@@ -34,7 +34,7 @@ class BackupManager:
     def __init__(
         self,
         backup_dir: str = "./backups",
-        database: Database | None = None,
+        database: Optional[Database] = None,
     ) -> None:
         self._backup_dir = Path(backup_dir)
         self._backup_dir.mkdir(parents=True, exist_ok=True)
@@ -43,7 +43,7 @@ class BackupManager:
     def create_backup(
         self,
         description: str = "",
-        tags: list[str] | None = None,
+        tags: Optional[List[str]] = None,
     ) -> BackupInfo:
         """Create a full backup of the database and exports."""
         timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS semantic_memory (
             logger.error(f"Restore failed: {e}")
             return False
 
-    def list_backups(self) -> list[BackupInfo]:
+    def list_backups(self) -> List[BackupInfo]:
         """List all available backups."""
         backups = []
         for f in sorted(self._backup_dir.glob("mercatus_backup_*.zip")):

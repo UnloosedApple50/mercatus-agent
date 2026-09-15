@@ -6,7 +6,7 @@ import csv
 import io
 import json
 from datetime import datetime
-from typing import Any, Literal
+from typing import Any, Dict, List, Literal, Optional
 
 from mercatus.db.database import Database, db
 from mercatus.utils.logger import get_logger
@@ -17,18 +17,18 @@ logger = get_logger("tools.export")
 class DataExporter:
     """Export agent data to various formats."""
 
-    def __init__(self, database: Database | None = None) -> None:
+    def __init__(self, database: Optional[Database] = None) -> None:
         self._db = database or db
 
     async def export_episodic_memory(
         self,
         format: Literal["json", "csv"] = "json",
-        session_id: str | None = None,
-        module: str | None = None,
+        session_id: Optional[str] = None,
+        module: Optional[str] = None,
     ) -> str:
         """Export episodic memory data."""
         query = "SELECT * FROM episodic_memory WHERE 1=1"
-        params: list[Any] = []
+        params: List[Any] = []
 
         if session_id:
             query += " AND session_id = ?"
@@ -61,11 +61,11 @@ class DataExporter:
     async def export_semantic_memory(
         self,
         format: Literal["json", "csv"] = "json",
-        module: str | None = None,
+        module: Optional[str] = None,
     ) -> str:
         """Export semantic memory data."""
         query = "SELECT * FROM semantic_memory WHERE 1=1"
-        params: list[Any] = []
+        params: List[Any] = []
 
         if module:
             query += " AND module = ?"
@@ -95,11 +95,11 @@ class DataExporter:
     async def export_decisions(
         self,
         format: Literal["json", "csv"] = "json",
-        module: str | None = None,
+        module: Optional[str] = None,
     ) -> str:
         """Export decision history."""
         query = "SELECT * FROM decisions WHERE 1=1"
-        params: list[Any] = []
+        params: List[Any] = []
 
         if module:
             query += " AND module = ?"
@@ -173,7 +173,7 @@ class DataExporter:
             return output.getvalue()
         return json.dumps(conversations, indent=2, default=str)
 
-    async def export_all(self, format: Literal["json", "csv"] = "json") -> dict[str, str]:
+    async def export_all(self, format: Literal["json", "csv"] = "json") -> Dict[str, str]:
         """Export all data types."""
         return {
             "episodic_memory": await self.export_episodic_memory(format),

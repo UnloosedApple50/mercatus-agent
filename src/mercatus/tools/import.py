@@ -5,7 +5,7 @@ from __future__ import annotations
 import csv
 import io
 import json
-from typing import Any
+from typing import Any, Optional
 
 from mercatus.db.database import Database, db
 from mercatus.utils.logger import get_logger
@@ -16,7 +16,7 @@ logger = get_logger("tools.import")
 class DataImporter:
     """Import agent data from various formats."""
 
-    def __init__(self, database: Database | None = None) -> None:
+    def __init__(self, database: Optional[Database] = None) -> None:
         self._db = database or db
 
     async def import_semantic_memory(
@@ -59,11 +59,11 @@ class DataImporter:
                         int(entry.get("use_count", 0)),
                     ),
                 )
+                await self._db.commit()
                 count += 1
             except Exception as e:
-                logger.warning(f"Failed to import entry: {e}")
+                logger.error(f"Import error: {e}")
 
-        await self._db.commit()
         logger.info(f"Imported {count} semantic memory entries")
         return count
 
@@ -85,43 +85,25 @@ class DataImporter:
                 await self._db.execute(
                     """
                     INSERT INTO episodic_memory 
-                    (session_id, module, query, response, confidence, outcome, outcome_score)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    (session_id, module, query, response, confidence, metadata)
+                    VALUES (?, ?, ?, ?, ?, ?)
                     """,
                     (
-                        entry.get("session_id", f"import_{count}"),
+                        entry.get("session_id", "imported"),
                         entry.get("module", "general"),
                         entry.get("query", ""),
                         entry.get("response", ""),
                         float(entry.get("confidence", 0.5)),
-                        entry.get("outcome"),
-                        float(entry.get("outcome_score", 0) or 0),
+                        entry.get("metadata", "{}"),
                     ),
                 )
+                await self._db.commit()
                 count += 1
             except Exception as e:
-                logger.warning(f"Failed to import episodic entry: {e}")
+                logger.error(f"Import error: {e}")
 
-        await self._db.commit()
         logger.info(f"Imported {count} episodic memory entries")
         return count
-
-    async def validate_data(self, data: str, format: str = "json") -> dict[str, Any]:
-        """Validate import data without importing."""
-        try:
-            if format == "csv":
-                reader = csv.DictReader(io.StringIO(data))
-                entries = list(reader)
-            else:
-                entries = json.loads(data)
-
-            return {
-                "valid": True,
-                "entry_count": len(entries),
-                "sample_keys": list(entries[0].keys()) if entries else [],
-            }
-        except Exception as e:
-            return {"valid": False, "error": str(e)}
 
 
 data_importer = DataImporter()

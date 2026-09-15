@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import aiosqlite
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from mercatus.models.config import get_settings
 from mercatus.utils.logger import get_logger
@@ -46,7 +46,7 @@ class Database:
     async def execute(
         self,
         query: str,
-        params: tuple[Any, ...] | dict[str, Any] | None = None,
+        params: Optional[Union[Tuple[Any, ...], Dict[str, Any]]] = None,
     ) -> aiosqlite.Cursor:
         """
         Execute a parameterized query.
@@ -68,7 +68,7 @@ class Database:
     async def executemany(
         self,
         query: str,
-        params_list: list[tuple[Any, ...] | dict[str, Any]],
+        params_list: List[Union[Tuple[Any, ...], Dict[str, Any]]],
     ) -> aiosqlite.Cursor:
         """Execute a query multiple times with different parameters."""
         if not self._connection:
@@ -84,8 +84,8 @@ class Database:
     async def fetchall(
         self,
         query: str,
-        params: tuple[Any, ...] | dict[str, Any] | None = None,
-    ) -> list[aiosqlite.Row]:
+        params: Optional[Union[Tuple[Any, ...], Dict[str, Any]]] = None,
+    ) -> List[aiosqlite.Row]:
         """Execute query and return all rows."""
         cursor = await self.execute(query, params)
         return await cursor.fetchall()
@@ -93,7 +93,7 @@ class Database:
     async def fetchone(
         self,
         query: str,
-        params: tuple[Any, ...] | dict[str, Any] | None = None,
+        params: Optional[Union[Tuple[Any, ...], Dict[str, Any]]] = None,
     ) -> Optional[aiosqlite.Row]:
         """Execute query and return first row."""
         cursor = await self.execute(query, params)
@@ -102,7 +102,7 @@ class Database:
     async def fetchval(
         self,
         query: str,
-        params: tuple[Any, ...] | dict[str, Any] | None = None,
+        params: Optional[Union[Tuple[Any, ...], Dict[str, Any]]] = None,
         column: int = 0,
     ) -> Any:
         """Execute query and return single value."""

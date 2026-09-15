@@ -6,7 +6,7 @@ import json
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 from mercatus.db.database import Database, db
 from mercatus.utils.logger import get_logger
@@ -17,13 +17,13 @@ logger = get_logger("tools.report")
 class ReportGenerator:
     """Generate comprehensive usage reports."""
 
-    def __init__(self, database: Database | None = None) -> None:
+    def __init__(self, database: Optional[Database] = None) -> None:
         self._db = database or db
 
     async def generate_usage_report(
         self,
         days: int = 30,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """Generate a usage report for the specified period."""
         since = (datetime.utcnow() - timedelta(days=days)).isoformat()
 
@@ -108,7 +108,7 @@ class ReportGenerator:
             "daily_activity": daily_activity,
         }
 
-    async def generate_performance_report(self) -> dict[str, Any]:
+    async def generate_performance_report(self) -> Dict[str, Any]:
         """Generate LLM performance report."""
         metrics_row = await self._db.fetchone(
             """
@@ -138,7 +138,7 @@ class ReportGenerator:
             "peak_tps": 0,
         }
 
-    async def generate_security_report(self) -> dict[str, Any]:
+    async def generate_security_report(self) -> Dict[str, Any]:
         """Generate security audit report."""
         # Audit log entries
         audit_rows = await self._db.fetchall(

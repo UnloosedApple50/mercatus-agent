@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Dict, List, Optional, Union
 
 from mercatus.db.database import Database, db
 from mercatus.utils.logger import get_logger
@@ -22,7 +22,7 @@ class GraphNode:
     module: str
     size: int = 10
     color: str = "#6366f1"
-    metadata: dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     TYPE_COLORS = {
         "episodic": "#3b82f6",  # Blue
@@ -35,7 +35,7 @@ class GraphNode:
     def __post_init__(self) -> None:
         self.color = self.TYPE_COLORS.get(self.type, "#6366f1")
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "id": self.id,
             "label": self.label,
@@ -55,7 +55,7 @@ class GraphEdge:
     label: str = ""
     weight: float = 1.0
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "from": self.source,
             "to": self.target,
@@ -67,10 +67,10 @@ class GraphEdge:
 @dataclass
 class KnowledgeGraph:
     """Complete knowledge graph."""
-    nodes: list[GraphNode] = field(default_factory=list)
-    edges: list[GraphEdge] = field(default_factory=list)
+    nodes: List[GraphNode] = field(default_factory=list)
+    edges: List[GraphEdge] = field(default_factory=list)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "nodes": [n.to_dict() for n in self.nodes],
             "edges": [e.to_dict() for e in self.edges],
@@ -80,13 +80,13 @@ class KnowledgeGraph:
 class BrainMapEngine:
     """Generates knowledge graph from agent data."""
 
-    def __init__(self, database: Database | None = None) -> None:
+    def __init__(self, database: Optional[Database] = None) -> None:
         self._db = database or db
 
     async def generate_graph(
         self,
-        module_filter: str | None = None,
-        type_filter: list[str] | None = None,
+        module_filter: Optional[str] = None,
+        type_filter: Optional[List[str]] = None,
         limit: int = 200,
     ) -> KnowledgeGraph:
         """Generate the full knowledge graph."""
@@ -116,12 +116,12 @@ class BrainMapEngine:
     async def _add_episodic_nodes(
         self,
         graph: KnowledgeGraph,
-        module_filter: str | None,
+        module_filter: Optional[str],
         limit: int,
     ) -> None:
         """Add episodic memory nodes."""
         query = "SELECT * FROM episodic_memory"
-        params: list[Any] = []
+        params: List[Any] = []
 
         if module_filter:
             query += " WHERE module = ?"
@@ -157,12 +157,12 @@ class BrainMapEngine:
     async def _add_semantic_nodes(
         self,
         graph: KnowledgeGraph,
-        module_filter: str | None,
+        module_filter: Optional[str],
         limit: int,
     ) -> None:
         """Add semantic memory nodes."""
         query = "SELECT * FROM semantic_memory"
-        params: list[Any] = []
+        params: List[Any] = []
 
         if module_filter:
             query += " WHERE module = ?"
@@ -197,12 +197,12 @@ class BrainMapEngine:
     async def _add_decision_nodes(
         self,
         graph: KnowledgeGraph,
-        module_filter: str | None,
+        module_filter: Optional[str],
         limit: int,
     ) -> None:
         """Add decision nodes."""
         query = "SELECT * FROM decisions"
-        params: list[Any] = []
+        params: List[Any] = []
 
         if module_filter:
             query += " WHERE module = ?"
@@ -237,12 +237,12 @@ class BrainMapEngine:
     async def _add_conversation_nodes(
         self,
         graph: KnowledgeGraph,
-        module_filter: str | None,
+        module_filter: Optional[str],
         limit: int,
     ) -> None:
         """Add conversation (session) nodes."""
         query = "SELECT * FROM sessions"
-        params: list[Any] = []
+        params: List[Any] = []
 
         if module_filter:
             query += " WHERE module = ?"
@@ -275,7 +275,7 @@ class BrainMapEngine:
     async def _create_edges(self, graph: KnowledgeGraph) -> None:
         """Create edges between related nodes."""
         nodes_by_id = {n.id: n for n in graph.nodes}
-        nodes_by_module: dict[str, list[GraphNode]] = {}
+        nodes_by_module: Dict[str, List[GraphNode]] = {}
 
         for node in graph.nodes:
             if node.module not in nodes_by_module:
@@ -326,13 +326,13 @@ class BrainMapEngine:
                     )
                     graph.edges.append(edge)
 
-    def _extract_keywords(self, text: str) -> list[str]:
+    def _extract_keywords(self, text: str) -> List[str]:
         """Extract keywords from text."""
         words = re.findall(r'\b[a-zA-Z]{3,}\b', text.lower())
         stop_words = {"the", "and", "for", "are", "but", "not", "you", "all", "can", "had", "her", "was"}
         return [w for w in words if w not in stop_words]
 
-    async def get_node_details(self, node_id: str) -> dict[str, Any] | None:
+    async def get_node_details(self, node_id: str) -> Optional[Dict[str, Any]]:
         """Get detailed information about a specific node."""
         # Determine type from prefix
         if node_id.startswith("epi_"):
@@ -345,7 +345,7 @@ class BrainMapEngine:
             return await self._get_conversation_details(node_id)
         return None
 
-    async def _get_episodic_details(self, node_id: str) -> dict[str, Any] | None:
+    async def _get_episodic_details(self, node_id: str) -> Optional[Dict[str, Any]]:
         """Get episodic memory details."""
         try:
             mem_id = int(node_id.split("_")[-1])
@@ -371,7 +371,7 @@ class BrainMapEngine:
             "created_at": row["created_at"] if isinstance(row["created_at"], str) else row[7],
         }
 
-    async def _get_semantic_details(self, node_id: str) -> dict[str, Any] | None:
+    async def _get_semantic_details(self, node_id: str) -> Optional[Dict[str, Any]]:
         """Get semantic memory details."""
         try:
             mem_id = int(node_id.split("_")[-1])
@@ -396,7 +396,7 @@ class BrainMapEngine:
             "use_count": row["use_count"] if isinstance(row["use_count"], int) else row[7],
         }
 
-    async def _get_decision_details(self, node_id: str) -> dict[str, Any] | None:
+    async def _get_decision_details(self, node_id: str) -> Optional[Dict[str, Any]]:
         """Get decision details."""
         try:
             dec_id = int(node_id.split("_")[-1])
@@ -420,7 +420,7 @@ class BrainMapEngine:
             "reasoning": row["reasoning"] if isinstance(row["reasoning"], str) else row[7],
         }
 
-    async def _get_conversation_details(self, node_id: str) -> dict[str, Any] | None:
+    async def _get_conversation_details(self, node_id: str) -> Optional[Dict[str, Any]]:
         """Get conversation (session) details."""
         sid = node_id.replace("conv_", "")
 

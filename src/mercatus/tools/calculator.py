@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 
 @dataclass
@@ -13,7 +13,7 @@ class CalculationResult:
     """Result of a calculation."""
 
     expression: str
-    result: float | str
+    result: Union[float, str]
     success: bool = True
     error: Optional[str] = None
 
