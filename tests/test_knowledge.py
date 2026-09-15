@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pytest
-from athena.knowledge.base import KnowledgeBase, KnowledgeFact, get_knowledge_base
+from mercatus.knowledge.base import KnowledgeBase, KnowledgeFact, get_knowledge_base
 
 
 class TestKnowledgeBase:

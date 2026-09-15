@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pytest
-from athena.server.api import create_app
+from mercatus.server.api import create_app
 
 
 class TestSystemMetricsEndpoint:

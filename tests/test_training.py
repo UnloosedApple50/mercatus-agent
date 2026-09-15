@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 import pytest_asyncio
-from athena.training.feedback import FeedbackManager, FeedbackEntry
-from athena.training.adaptation import AdaptationManager, AdaptationRule
+from mercatus.training.feedback import FeedbackManager, FeedbackEntry
+from mercatus.training.adaptation import AdaptationManager, AdaptationRule
 
 
 class TestFeedbackManager:

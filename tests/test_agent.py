@@ -6,9 +6,9 @@ import pytest
 import pytest_asyncio
 from typing import AsyncGenerator
 
-from athena.core.agent import AthenaAgent, ChatResponse
-from athena.db.database import Database
-from athena.db.migrations import init_schema
+from mercatus.core.agent import MercatusAgent, ChatResponse
+from mercatus.db.database import Database
+from mercatus.db.migrations import init_schema
 
 
 @pytest_asyncio.fixture
@@ -20,11 +20,11 @@ async def db() -> AsyncGenerator[Database, None]:
     await database.close()
 
 
-class TestAthenaAgent:
+class TestMercatusAgent:
     """Tests for the main agent."""
 
     @pytest.mark.asyncio
-    async def test_chat_general(self, agent: AthenaAgent) -> None:
+    async def test_chat_general(self, agent: MercatusAgent) -> None:
         """Test basic chat functionality."""
         response = await agent.chat("Hello, can you help me?")
         assert isinstance(response, ChatResponse)
@@ -33,7 +33,7 @@ class TestAthenaAgent:
         assert response.session_id.startswith("sess_")
 
     @pytest.mark.asyncio
-    async def test_chat_sales(self, agent: AthenaAgent) -> None:
+    async def test_chat_sales(self, agent: MercatusAgent) -> None:
         """Test sales module chat."""
         response = await agent.chat(
             "What are the best negotiation tactics?",
@@ -44,7 +44,7 @@ class TestAthenaAgent:
         assert response.confidence > 0
 
     @pytest.mark.asyncio
-    async def test_chat_trading(self, agent: AthenaAgent) -> None:
+    async def test_chat_trading(self, agent: MercatusAgent) -> None:
         """Test trading module chat."""
         response = await agent.chat(
             "How do I manage risk in volatile markets?",
@@ -54,14 +54,14 @@ class TestAthenaAgent:
         assert len(response.response) > 0
 
     @pytest.mark.asyncio
-    async def test_chat_creates_session(self, agent: AthenaAgent) -> None:
+    async def test_chat_creates_session(self, agent: MercatusAgent) -> None:
         """Test that chat creates a session ID."""
         response = await agent.chat("Test query")
         assert response.session_id is not None
         assert len(response.session_id) > 0
 
     @pytest.mark.asyncio
-    async def test_chat_stores_memory(self, agent: AthenaAgent) -> None:
+    async def test_chat_stores_memory(self, agent: MercatusAgent) -> None:
         """Test that chat stores episodic memory."""
         response = await agent.chat("How to close a deal?")
 
@@ -71,7 +71,7 @@ class TestAthenaAgent:
         assert history[0].query == "How to close a deal?"
 
     @pytest.mark.asyncio
-    async def test_chat_skips_memory_storage(self, agent: AthenaAgent) -> None:
+    async def test_chat_skips_memory_storage(self, agent: MercatusAgent) -> None:
         """Test chat with store_memory=False."""
         response = await agent.chat("Test query", store_memory=False)
 
@@ -79,13 +79,13 @@ class TestAthenaAgent:
         assert len(history) == 0
 
     @pytest.mark.asyncio
-    async def test_chat_invalid_module(self, agent: AthenaAgent) -> None:
+    async def test_chat_invalid_module(self, agent: MercatusAgent) -> None:
         """Test that invalid module raises error."""
         with pytest.raises(ValueError):
             await agent.chat("Test", module="invalid")
 
     @pytest.mark.asyncio
-    async def test_chat_with_session_id(self, agent: AthenaAgent) -> None:
+    async def test_chat_with_session_id(self, agent: MercatusAgent) -> None:
         """Test chat with explicit session ID."""
         response = await agent.chat("Query 1", session_id="custom_sess")
         response2 = await agent.chat("Query 2", session_id="custom_sess")
@@ -98,7 +98,7 @@ class TestAthenaAgent:
         assert len(history) == 2
 
     @pytest.mark.asyncio
-    async def test_decide(self, agent: AthenaAgent) -> None:
+    async def test_decide(self, agent: MercatusAgent) -> None:
         """Test decision endpoint."""
         decision = await agent.decide(
             context="Client wants discount",
@@ -112,7 +112,7 @@ class TestAthenaAgent:
         assert len(decision.options) == 3
 
     @pytest.mark.asyncio
-    async def test_add_knowledge(self, agent: AthenaAgent) -> None:
+    async def test_add_knowledge(self, agent: MercatusAgent) -> None:
         """Test adding knowledge to semantic memory."""
         memory_id = await agent.add_knowledge(
             module="sales",
@@ -131,7 +131,7 @@ class TestAthenaAgent:
         assert memories[0].value == "This is a test fact."
 
     @pytest.mark.asyncio
-    async def test_provide_feedback(self, agent: AthenaAgent) -> None:
+    async def test_provide_feedback(self, agent: MercatusAgent) -> None:
         """Test providing feedback on past interaction."""
         response = await agent.chat("Test query")
 
@@ -149,7 +149,7 @@ class TestAthenaAgent:
         assert updated[0].outcome_score == 0.9
 
     @pytest.mark.asyncio
-    async def test_session_history(self, agent: AthenaAgent) -> None:
+    async def test_session_history(self, agent: MercatusAgent) -> None:
         """Test retrieving session history."""
         response = await agent.chat("Query 1", session_id="hist_test")
         await agent.chat("Query 2", session_id="hist_test")
@@ -159,7 +159,7 @@ class TestAthenaAgent:
         assert len(history) == 3
 
     @pytest.mark.asyncio
-    async def test_response_to_dict(self, agent: AthenaAgent) -> None:
+    async def test_response_to_dict(self, agent: MercatusAgent) -> None:
         """Test ChatResponse serialization."""
         response = await agent.chat("Test")
         d = response.to_dict()
@@ -171,21 +171,21 @@ class TestAthenaAgent:
         assert "timestamp" in d
 
     @pytest.mark.asyncio
-    async def test_uptime(self, agent: AthenaAgent) -> None:
+    async def test_uptime(self, agent: MercatusAgent) -> None:
         """Test uptime tracking."""
         import asyncio
         await asyncio.sleep(0.01)
         assert agent.uptime_seconds > 0
 
     @pytest.mark.asyncio
-    async def test_fallback_flag(self, agent: AthenaAgent) -> None:
+    async def test_fallback_flag(self, agent: MercatusAgent) -> None:
         """Test fallback flag is set when LLM unavailable."""
         response = await agent.chat("Test query")
         # LLM is not available in tests, so fallback should be True
         assert response.fallback is True
 
     @pytest.mark.asyncio
-    async def test_memories_used(self, agent: AthenaAgent) -> None:
+    async def test_memories_used(self, agent: MercatusAgent) -> None:
         """Test memories_used count."""
         # Add some knowledge first
         await agent.add_knowledge(

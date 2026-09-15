@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import pytest
-from athena.utils.security import (
+from mercatus.utils.security import (
     sanitize_input,
     validate_module,
     check_sql_injection,
     generate_session_id,
 )
-from athena.utils.logger import get_logger
+from mercatus.utils.logger import get_logger
 
 
 class TestSecurityUtils:

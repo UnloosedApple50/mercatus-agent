@@ -7,12 +7,12 @@ import pytest_asyncio
 from typing import AsyncGenerator
 from unittest.mock import AsyncMock, MagicMock
 
-from athena.core.memory import MemoryManager, SemanticMemory
-from athena.core.retrieval import RetrievalEngine
-from athena.core.decision import DecisionEngine, Decision
-from athena.db.database import Database
-from athena.db.migrations import init_schema
-from athena.models.llm import LLMClient
+from mercatus.core.memory import MemoryManager, SemanticMemory
+from mercatus.core.retrieval import RetrievalEngine
+from mercatus.core.decision import DecisionEngine, Decision
+from mercatus.db.database import Database
+from mercatus.db.migrations import init_schema
+from mercatus.models.llm import LLMClient
 
 
 @pytest_asyncio.fixture

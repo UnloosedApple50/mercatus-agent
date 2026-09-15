@@ -6,10 +6,10 @@ import pytest
 import pytest_asyncio
 from typing import AsyncGenerator
 
-from athena.core.memory import MemoryManager, SemanticMemory
-from athena.core.retrieval import RetrievalEngine
-from athena.db.database import Database
-from athena.db.migrations import init_schema
+from mercatus.core.memory import MemoryManager, SemanticMemory
+from mercatus.core.retrieval import RetrievalEngine
+from mercatus.db.database import Database
+from mercatus.db.migrations import init_schema
 
 
 @pytest_asyncio.fixture

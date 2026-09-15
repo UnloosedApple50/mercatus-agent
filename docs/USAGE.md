@@ -6,17 +6,17 @@
 
 ```bash
 # From the project directory
-python -m athena
+python -m mercatus
 
 # Or with custom settings
-ATHENA_PORT=9000 ATHENA_LLM_MODEL=llama3.1 python -m athena
+MERCATUS_PORT=9000 MERCATUS_LLM_MODEL=llama3.1 python -m mercatus
 ```
 
 The dashboard will be available at `http://localhost:8585`.
 
 ### First Run
 
-On first launch, Athena will:
+On first launch, Mercatus will:
 1. Initialize the SQLite database
 2. Seed the knowledge base with sales and trading facts
 3. Attempt to connect to the LLM service
@@ -145,23 +145,23 @@ Charts update every 5 seconds via WebSocket.
 
 ```bash
 # Server
-ATHENA_HOST=0.0.0.0
-ATHENA_PORT=8585
+MERCATUS_HOST=0.0.0.0
+MERCATUS_PORT=8585
 
 # LLM
-ATHENA_LLM_BASE_URL=http://localhost:11434/v1
-ATHENA_LLM_MODEL=llama3.2
-ATHENA_LLM_TIMEOUT=30
+MERCATUS_LLM_BASE_URL=http://localhost:11434/v1
+MERCATUS_LLM_MODEL=llama3.2
+MERCATUS_LLM_TIMEOUT=30
 
 # Database
-ATHENA_DB_PATH=./data/athena.db
+MERCATUS_DB_PATH=./data/mercatus.db
 
 # Security
-ATHENA_RATE_LIMIT=100
-ATHENA_MAX_INPUT_LENGTH=10000
+MERCATUS_RATE_LIMIT=100
+MERCATUS_MAX_INPUT_LENGTH=10000
 
 # Logging
-ATHENA_LOG_LEVEL=INFO
+MERCATUS_LOG_LEVEL=INFO
 ```
 
 ### Settings Page

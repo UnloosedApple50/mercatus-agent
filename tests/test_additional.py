@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 from unittest.mock import patch, MagicMock, AsyncMock
-from athena.tools.scheduler import Scheduler
-from athena.tools.notifier import Notifier
-from athena.integrations.connectors import (
+from mercatus.tools.scheduler import Scheduler
+from mercatus.tools.notifier import Notifier
+from mercatus.integrations.connectors import (
     ConnectorManager, ConnectorConfig, 
     SlackConnector, DiscordConnector, TelegramConnector, ZapierConnector
 )
@@ -107,7 +107,7 @@ class TestNotifierExtended:
     def test_get_notifications_unread_only(self):
         notifier = Notifier()
         # Manually add notifications
-        from athena.tools.notifier import Notification
+        from mercatus.tools.notifier import Notification
         notifier._notifications["test1"] = Notification(
             id="test1", title="T", message="M", read=False
         )
@@ -119,7 +119,7 @@ class TestNotifierExtended:
 
     def test_get_unread_count_multiple(self):
         notifier = Notifier()
-        from athena.tools.notifier import Notification
+        from mercatus.tools.notifier import Notification
         notifier._notifications["a"] = Notification(id="a", title="T", message="M", read=False)
         notifier._notifications["b"] = Notification(id="b", title="T", message="M", read=False)
         notifier._notifications["c"] = Notification(id="c", title="T", message="M", read=True)
@@ -129,7 +129,7 @@ class TestNotifierExtended:
 class TestSchedulerExtended:
     def test_list_tasks_include_completed(self):
         scheduler = Scheduler()
-        from athena.tools.scheduler import ScheduledTask
+        from mercatus.tools.scheduler import ScheduledTask
         scheduler._tasks["t1"] = ScheduledTask(
             id="t1", name="Test", description="",
             scheduled_at="2025-01-01T00:00:00", completed=False

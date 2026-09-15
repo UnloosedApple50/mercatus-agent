@@ -5,8 +5,8 @@ from __future__ import annotations
 import pytest
 import os
 from unittest.mock import MagicMock, AsyncMock, patch
-from athena.models.llm import LLMClient, LLMResponse
-from athena.models.config import Settings, get_settings
+from mercatus.models.llm import LLMClient, LLMResponse
+from mercatus.models.config import Settings, get_settings
 
 
 class TestLLMClient:

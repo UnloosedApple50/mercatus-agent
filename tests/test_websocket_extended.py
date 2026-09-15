@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 import json
 from unittest.mock import AsyncMock, MagicMock, patch
-from athena.server.websocket import WebSocketHandler, ConnectionManager
+from mercatus.server.websocket import WebSocketHandler, ConnectionManager
 
 
 class TestWebSocketHandler:

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Athena's training system lets you improve agent performance through feedback collection, session replay, and behavioral adaptation.
+Mercatus's training system lets you improve agent performance through feedback collection, session replay, and behavioral adaptation.
 
 ## How It Works
 

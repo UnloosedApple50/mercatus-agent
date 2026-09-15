@@ -6,8 +6,8 @@ import pytest
 import pytest_asyncio
 from typing import AsyncGenerator
 
-from athena.db.database import Database
-from athena.db.migrations import init_schema, seed_knowledge, get_current_version
+from mercatus.db.database import Database
+from mercatus.db.migrations import init_schema, seed_knowledge, get_current_version
 
 
 @pytest_asyncio.fixture

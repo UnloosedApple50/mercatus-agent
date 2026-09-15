@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 import pytest_asyncio
-from athena.monitor.metrics import MetricsTracker, TokenRecord, ThroughputStats
+from mercatus.monitor.metrics import MetricsTracker, TokenRecord, ThroughputStats
 
 
 class TestMetricsTracker:

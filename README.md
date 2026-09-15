@@ -1,4 +1,4 @@
-# Athena Agent v2.0
+# Mercatus Agent v2.0
 
 A comprehensive Specialized Language Memory Agent for Sales & Trading with real-time dashboard, system monitoring, integrations, and agent training capabilities.
 
@@ -26,10 +26,10 @@ A comprehensive Specialized Language Memory Agent for Sales & Trading with real-
 pip install -e .
 
 # Run the server
-python -m athena
+python -m mercatus
 
 # Or use the CLI
-athena
+mercatus
 ```
 
 The dashboard will be available at `http://localhost:8585`.
@@ -94,23 +94,23 @@ Connect to `ws://localhost:8585/ws` for real-time updates:
 
 ## Configuration
 
-Environment variables (prefix: `ATHENA_`):
+Environment variables (prefix: `MERCATUS_`):
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `ATHENA_HOST` | `0.0.0.0` | Server host |
-| `ATHENA_PORT` | `8585` | Server port |
-| `ATHENA_LLM_BASE_URL` | `http://localhost:11434/v1` | LLM API URL |
-| `ATHENA_LLM_MODEL` | `llama3.2` | LLM model name |
-| `ATHENA_DB_PATH` | `./data/athena.db` | Database path |
-| `ATHENA_LOG_LEVEL` | `INFO` | Logging level |
-| `ATHENA_RATE_LIMIT` | `100` | Requests per minute |
-| `ATHENA_MAX_INPUT_LENGTH` | `10000` | Max input characters |
+| `MERCATUS_HOST` | `0.0.0.0` | Server host |
+| `MERCATUS_PORT` | `8585` | Server port |
+| `MERCATUS_LLM_BASE_URL` | `http://localhost:11434/v1` | LLM API URL |
+| `MERCATUS_LLM_MODEL` | `llama3.2` | LLM model name |
+| `MERCATUS_DB_PATH` | `./data/mercatus.db` | Database path |
+| `MERCATUS_LOG_LEVEL` | `INFO` | Logging level |
+| `MERCATUS_RATE_LIMIT` | `100` | Requests per minute |
+| `MERCATUS_MAX_INPUT_LENGTH` | `10000` | Max input characters |
 
 ## Architecture
 
 ```
-src/athena/
+src/mercatus/
 ├── core/           # Agent, Memory, Retrieval, Decision engines
 ├── db/             # Database layer and migrations
 ├── integrations/   # Webhooks, API Keys, Connectors, OAuth
@@ -127,7 +127,7 @@ src/athena/
 
 ```bash
 # Run all tests with coverage
-pytest --cov=athena --cov-report=term-missing
+pytest --cov=mercatus --cov-report=term-missing
 
 # Run specific test module
 pytest tests/test_system.py -v

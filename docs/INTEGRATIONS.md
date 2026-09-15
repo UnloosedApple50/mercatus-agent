@@ -2,7 +2,7 @@
 
 ## Overview
 
-Athena Agent's integrations system allows you to connect external services, register webhooks for event notifications, and generate API keys for programmatic access.
+Mercatus Agent's integrations system allows you to connect external services, register webhooks for event notifications, and generate API keys for programmatic access.
 
 ## Webhooks
 
@@ -92,7 +92,7 @@ curl -X POST http://localhost:8585/api/v1/integrations/api-keys \
 
 ```bash
 curl -X POST http://localhost:8585/api/v1/chat \
-  -H "Authorization: Bearer athena_your_key_here" \
+  -H "Authorization: Bearer mercatus_your_key_here" \
   -H "Content-Type: application/json" \
   -d '{"message": "Hello", "module": "general"}'
 ```

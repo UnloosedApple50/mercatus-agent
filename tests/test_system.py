@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pytest
-from athena.monitor.system import SystemMonitor, CPUMetrics, RAMMetrics, DiskMetrics, NetworkMetrics
+from mercatus.monitor.system import SystemMonitor, CPUMetrics, RAMMetrics, DiskMetrics, NetworkMetrics
 
 
 class TestSystemMonitor:

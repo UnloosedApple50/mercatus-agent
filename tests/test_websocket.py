@@ -9,8 +9,8 @@ from httpx import AsyncClient, ASGITransport
 from fastapi import FastAPI, WebSocket
 from starlette.websockets import WebSocketDisconnect
 
-from athena.server.websocket import ConnectionManager, WebSocketHandler
-from athena.core.agent import AthenaAgent, ChatResponse
+from mercatus.server.websocket import ConnectionManager, WebSocketHandler
+from mercatus.core.agent import MercatusAgent, ChatResponse
 from unittest.mock import MagicMock, AsyncMock
 
 

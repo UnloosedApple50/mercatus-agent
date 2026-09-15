@@ -2,7 +2,7 @@
 
 ## Threat Model
 
-Athena is designed for single-user, local deployment. It is not intended for multi-user or internet-facing deployments without additional hardening.
+Mercatus is designed for single-user, local deployment. It is not intended for multi-user or internet-facing deployments without additional hardening.
 
 ## Input Validation
 
@@ -16,7 +16,7 @@ Athena is designed for single-user, local deployment. It is not intended for mul
 
 ```python
 # Example: How inputs are sanitized
-from athena.utils.security import sanitize_input
+from mercatus.utils.security import sanitize_input
 
 safe_text = sanitize_input(user_input)  # Always sanitize
 ```
@@ -48,7 +48,7 @@ await db.execute(f"SELECT * FROM memories WHERE id = {memory_id}")
 The `check_sql_injection()` function provides additional detection:
 
 ```python
-from athena.utils.security import check_sql_injection
+from mercatus.utils.security import check_sql_injection
 
 if check_sql_injection(user_input):
     raise SecurityError("Suspicious input detected")
@@ -67,7 +67,7 @@ Built-in rate limiting prevents abuse:
 
 ```python
 # Configuration
-ATHENA_RATE_LIMIT=100  # requests per minute
+MERCATUS_RATE_LIMIT=100  # requests per minute
 ```
 
 Implementation uses token bucket algorithm per IP address.
@@ -122,7 +122,7 @@ For production deployments:
 
 ## Vulnerability Reporting
 
-Report security issues to: security@athena-agent.dev
+Report security issues to: security@mercatus-agent.dev
 
 ## Security Architecture
 

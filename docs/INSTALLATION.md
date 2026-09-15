@@ -11,14 +11,14 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/UnloosedApple50/athena-agent.git
-cd athena-agent
+git clone https://github.com/UnloosedApple50/mercatus-agent.git
+cd mercatus-agent
 
 # 2. Create virtual environment
 python3.11 -m venv .venv
 source .venv/bin/activate
 
-# 3. Install Athena
+# 3. Install Mercatus
 pip install -e .
 
 # 4. Configure environment
@@ -26,10 +26,10 @@ cp .env.example .env
 # Edit .env with your settings
 
 # 5. Initialize database
-python -m athena db init
+python -m mercatus db init
 
 # 6. Start the server
-python -m athena run
+python -m mercatus run
 ```
 
 ## Development Install
@@ -42,12 +42,12 @@ pip install -e ".[dev]"
 pytest
 
 # Run with coverage
-pytest --cov=athena --cov-report=html
+pytest --cov=mercatus --cov-report=html
 ```
 
 ## Ollama Setup (Optional)
 
-Ollama provides LLM capabilities. Without it, Athena uses rule-based fallback.
+Ollama provides LLM capabilities. Without it, Mercatus uses rule-based fallback.
 
 ```bash
 # Install Ollama (macOS)
@@ -72,14 +72,14 @@ curl http://localhost:8585/api/v1/health
 # Send test message
 curl -X POST http://localhost:8585/api/v1/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "Hello Athena!", "module": "general"}'
+  -d '{"message": "Hello Mercatus!", "module": "general"}'
 ```
 
 ## Docker (Optional)
 
 ```bash
-docker build -t athena-agent .
-docker run -p 8585:8585 -v athena-data:/app/data athena-agent
+docker build -t mercatus-agent .
+docker run -p 8585:8585 -v mercatus-data:/app/data mercatus-agent
 ```
 
 ## Troubleshooting
@@ -87,13 +87,13 @@ docker run -p 8585:8585 -v athena-data:/app/data athena-agent
 ### Port Already in Use
 ```bash
 # Change port in .env
-ATHENA_PORT=8586
+MERCATUS_PORT=8586
 ```
 
 ### Database Locked
 ```bash
 # Remove stale lock files
-rm -f data/athena.db-wal data/athena.db-shm
+rm -f data/mercatus.db-wal data/mercatus.db-shm
 ```
 
 ### Ollama Connection Failed
@@ -102,13 +102,13 @@ rm -f data/athena.db-wal data/athena.db-shm
 curl http://localhost:11434/api/tags
 
 # Or run without LLM (rule-based mode)
-# Just don't start Ollama — Athena auto-detects
+# Just don't start Ollama — Mercatus auto-detects
 ```
 
 ### Memory Issues on 8GB RAM
 ```bash
 # Use a lighter model
-ATHENA_LLM_MODEL=phi3:mini
+MERCATUS_LLM_MODEL=phi3:mini
 
 # Or disable LLM entirely (rule-based only)
 # Don't start Ollama

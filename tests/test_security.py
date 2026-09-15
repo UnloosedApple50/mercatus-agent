@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pytest
-from athena.utils.security import (
+from mercatus.utils.security import (
     RateLimiter,
     AuditLogger,
     sanitize_input,

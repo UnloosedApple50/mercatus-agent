@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 import pytest_asyncio
-from athena.integrations.webhooks import WebhookManager, Webhook, WebhookEvent
-from athena.integrations.api_keys import APIKeyManager, APIKey
-from athena.integrations.oauth import OAuthManager, OAuthToken
+from mercatus.integrations.webhooks import WebhookManager, Webhook, WebhookEvent
+from mercatus.integrations.api_keys import APIKeyManager, APIKey
+from mercatus.integrations.oauth import OAuthManager, OAuthToken
 
 
 class TestWebhookManager:
@@ -116,7 +116,7 @@ class TestAPIKeyManager:
     def test_generate_key(self):
         manager = APIKeyManager()
         key = manager._generate_key()
-        assert key.startswith("athena_")
+        assert key.startswith("mercatus_")
 
     def test_hash_key(self):
         manager = APIKeyManager()
@@ -133,7 +133,7 @@ class TestAPIKeyManager:
             name="test-key",
             scopes=["chat", "memory.read"],
         )
-        assert full_key.startswith("athena_")
+        assert full_key.startswith("mercatus_")
         assert isinstance(api_key, APIKey)
         assert api_key.name == "test-key"
         assert "chat" in api_key.scopes
@@ -154,7 +154,7 @@ class TestAPIKeyManager:
     @pytest.mark.asyncio
     async def test_validate_key_invalid(self):
         manager = APIKeyManager()
-        result = await manager.validate_key("athena_invalid_key_12345")
+        result = await manager.validate_key("mercatus_invalid_key_12345")
         assert result is None
 
     @pytest.mark.asyncio

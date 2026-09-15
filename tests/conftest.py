@@ -1,4 +1,4 @@
-"""Pytest configuration and fixtures for Athena Agent tests."""
+"""Pytest configuration and fixtures for Mercatus Agent tests."""
 
 from __future__ import annotations
 
@@ -11,18 +11,18 @@ from typing import AsyncGenerator, Generator
 from pathlib import Path
 
 # Set test environment before imports
-os.environ["ATHENA_DB_PATH"] = ":memory:"
-os.environ["ATHENA_LOG_LEVEL"] = "WARNING"
-os.environ["ATHENA_LLM_BASE_URL"] = "http://localhost:11434/v1"
-os.environ["ATHENA_LLM_MODEL"] = "test-model"
+os.environ["MERCATUS_DB_PATH"] = ":memory:"
+os.environ["MERCATUS_LOG_LEVEL"] = "WARNING"
+os.environ["MERCATUS_LLM_BASE_URL"] = "http://localhost:11434/v1"
+os.environ["MERCATUS_LLM_MODEL"] = "test-model"
 
-from athena.db.database import Database
-from athena.db.migrations import init_schema, seed_knowledge
-from athena.core.memory import MemoryManager
-from athena.core.retrieval import RetrievalEngine
-from athena.core.decision import DecisionEngine
-from athena.core.agent import AthenaAgent
-from athena.models.llm import LLMClient
+from mercatus.db.database import Database
+from mercatus.db.migrations import init_schema, seed_knowledge
+from mercatus.core.memory import MemoryManager
+from mercatus.core.retrieval import RetrievalEngine
+from mercatus.core.decision import DecisionEngine
+from mercatus.core.agent import MercatusAgent
+from mercatus.models.llm import LLMClient
 
 
 @pytest.fixture(scope="session")
@@ -72,9 +72,9 @@ async def agent(
     memory: MemoryManager,
     retrieval: RetrievalEngine,
     decision: DecisionEngine,
-) -> AsyncGenerator[AthenaAgent, None]:
+) -> AsyncGenerator[MercatusAgent, None]:
     """Create an agent with test components."""
-    a = AthenaAgent(memory, retrieval, decision)
+    a = MercatusAgent(memory, retrieval, decision)
     yield a
 
 

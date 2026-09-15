@@ -1,11 +1,11 @@
 #!/bin/bash
-# Athena Agent Installation Script
+# Mercatus Agent Installation Script
 # Usage: ./scripts/install.sh
 
 set -e
 
 echo "╔══════════════════════════════════════════╗"
-echo "║     Athena Agent — Installation Script    ║"
+echo "║     Mercatus Agent — Installation Script    ║"
 echo "╚══════════════════════════════════════════╝"
 echo ""
 
@@ -82,7 +82,7 @@ echo -e "${GREEN}✓ Data and logs directories created${NC}"
 # Initialize database
 echo ""
 echo "Initializing database..."
-python3 -m athena db init
+python3 -m mercatus db init
 echo -e "${GREEN}✓ Database initialized${NC}"
 
 # Check for Ollama
@@ -95,7 +95,7 @@ if command -v ollama &>/dev/null; then
     echo "  ollama serve"
     echo "  ollama pull llama3.2"
 else
-    echo -e "${YELLOW}! Ollama not found — Athena will use rule-based fallback${NC}"
+    echo -e "${YELLOW}! Ollama not found — Mercatus will use rule-based fallback${NC}"
     echo "  Install from: https://ollama.ai"
 fi
 
@@ -104,9 +104,9 @@ echo "╔═══════════════════════�
 echo -e "${GREEN}║     Installation Complete!               ║${NC}"
 echo "╠══════════════════════════════════════════╣"
 echo "║                                          ║"
-echo "║  Start Athena:                           ║"
+echo "║  Start Mercatus:                           ║"
 echo "║    source .venv/bin/activate             ║"
-echo "║    python -m athena run                  ║"
+echo "║    python -m mercatus run                  ║"
 echo "║                                          ║"
 echo "║  Dashboard: http://localhost:8585        ║"
 echo "║                                          ║"

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Athena Agent includes comprehensive system monitoring to track both machine resources and agent performance metrics.
+Mercatus Agent includes comprehensive system monitoring to track both machine resources and agent performance metrics.
 
 ## Dashboard Views
 

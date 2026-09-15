@@ -249,10 +249,10 @@ Generate a new API key.
 **Response:**
 ```json
 {
-  "key": "athena_AbCdEfGhIjKlMnOpQrStUvWxYz123456",
+  "key": "mercatus_AbCdEfGhIjKlMnOpQrStUvWxYz123456",
   "id": "key_abc123",
   "name": "my-app-key",
-  "prefix": "athena_AbCd...",
+  "prefix": "mercatus_AbCd...",
   "scopes": ["chat", "memory.read"],
   "created_at": "2025-01-15T10:30:00"
 }

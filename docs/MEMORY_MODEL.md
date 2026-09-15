@@ -2,7 +2,7 @@
 
 ## Overview
 
-Athena's memory system is modeled after human cognitive memory, consisting of three distinct types that work together to provide context-aware responses.
+Mercatus's memory system is modeled after human cognitive memory, consisting of three distinct types that work together to provide context-aware responses.
 
 ## Memory Types
 
@@ -17,8 +17,8 @@ EpisodicMemory
 ├── session_id: Groups interactions into conversations
 ├── module: Domain context (sales/trading/general)
 ├── query: The user's question
-├── response: Athena's answer
-├── confidence: How confident Athena was (0-1)
+├── response: Mercatus's answer
+├── confidence: How confident Mercatus was (0-1)
 ├── outcome: User-provided feedback on result
 ├── outcome_score: Numerical outcome rating (0-1)
 ├── metadata: Additional structured data

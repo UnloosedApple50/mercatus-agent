@@ -1,18 +1,18 @@
-"""Integration tests for Athena Agent."""
+"""Integration tests for Mercatus Agent."""
 
 from __future__ import annotations
 
 import pytest
 from starlette.testclient import TestClient
 
-from athena.server.api import app
-from athena.db.database import Database
-from athena.db.migrations import init_schema, seed_knowledge
-from athena.core.memory import MemoryManager
-from athena.core.retrieval import RetrievalEngine
-from athena.core.decision import DecisionEngine
-from athena.core.agent import AthenaAgent
-from athena.models.llm import llm_client
+from mercatus.server.api import app
+from mercatus.db.database import Database
+from mercatus.db.migrations import init_schema, seed_knowledge
+from mercatus.core.memory import MemoryManager
+from mercatus.core.retrieval import RetrievalEngine
+from mercatus.core.decision import DecisionEngine
+from mercatus.core.agent import MercatusAgent
+from mercatus.models.llm import llm_client
 
 
 @pytest.fixture(scope="module")
@@ -33,7 +33,7 @@ def test_client():
         memory = MemoryManager(test_db)
         retrieval = RetrievalEngine(memory, llm_client)
         decision = DecisionEngine(memory, retrieval, llm_client)
-        test_agent = AthenaAgent(memory, retrieval, decision, llm_client)
+        test_agent = MercatusAgent(memory, retrieval, decision, llm_client)
         
         # Set app state
         app.state.agent = test_agent

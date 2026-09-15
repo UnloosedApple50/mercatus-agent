@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import pytest
-from athena.tools.calculator import Calculator, CalculationResult
-from athena.tools.converter import Converter, ConversionResult
-from athena.tools.analyzer import Analyzer, TextAnalysis, DataStats
+from mercatus.tools.calculator import Calculator, CalculationResult
+from mercatus.tools.converter import Converter, ConversionResult
+from mercatus.tools.analyzer import Analyzer, TextAnalysis, DataStats
 
 
 class TestCalculator:

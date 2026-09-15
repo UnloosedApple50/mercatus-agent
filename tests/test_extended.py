@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import pytest
-from athena.tools.scheduler import Scheduler
-from athena.tools.notifier import Notifier, Notification
-from athena.tools.analyzer import Analyzer
-from athena.tools.converter import Converter
-from athena.tools.calculator import Calculator
+from mercatus.tools.scheduler import Scheduler
+from mercatus.tools.notifier import Notifier, Notification
+from mercatus.tools.analyzer import Analyzer
+from mercatus.tools.converter import Converter
+from mercatus.tools.calculator import Calculator
 
 
 class TestCalculatorExtended:

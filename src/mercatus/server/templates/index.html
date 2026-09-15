@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercatus Agent — Dashboard</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">✦</span>
+                    <span class="logo-text">Mercatus</span>
+                </div>
+                <span class="version">v2.0</span>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title" data-i18n="nav.main">Main</span>
+                <button class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label" data-i18n="nav.dashboard">Dashboard</span>
+                </button>
+                <button class="nav-item" data-page="chat">
+                    <span class="nav-icon">💬</span>
+                    <span class="nav-label" data-i18n="nav.chat">Chat</span>
+                </button>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title" data-i18n="nav.data">Data</span>
+                <button class="nav-item" data-page="memory">
+                    <span class="nav-icon">🧠</span>
+                    <span class="nav-label" data-i18n="nav.memory">Memory</span>
+                </button>
+                <button class="nav-item" data-page="decisions">
+                    <span class="nav-icon">⚖️</span>
+                    <span class="nav-label" data-i18n="nav.decisions">Decisions</span>
+                </button>
+                <button class="nav-item" data-page="knowledge">
+                    <span class="nav-icon">📚</span>
+                    <span class="nav-label" data-i18n="nav.knowledge">Knowledge</span>
+                </button>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title" data-i18n="nav.analysis">Analysis</span>
+                <button class="nav-item" data-page="brainmap">
+                    <span class="nav-icon">🕸️</span>
+                    <span class="nav-label" data-i18n="nav.brainmap">Brain Map</span>
+                </button>
+                <button class="nav-item" data-page="analytics">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-label" data-i18n="nav.analytics">Analytics</span>
+                </button>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title" data-i18n="nav.configuration">Configuration</span>
+                <button class="nav-item" data-page="integrations">
+                    <span class="nav-icon">🔗</span>
+                    <span class="nav-label" data-i18n="nav.integrations">Integrations</span>
+                </button>
+                <button class="nav-item" data-page="training">
+                    <span class="nav-icon">🎓</span>
+                    <span class="nav-label" data-i18n="nav.training">Training</span>
+                </button>
+                <button class="nav-item" data-page="logs">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-label" data-i18n="nav.logs">Logs</span>
+                </button>
+                <button class="nav-item" data-page="security">
+                    <span class="nav-icon">🔒</span>
+                    <span class="nav-label" data-i18n="nav.security">Security</span>
+                </button>
+                <button class="nav-item" data-page="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label" data-i18n="nav.settings">Settings</span>
+                </button>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-controls">
+                    <button class="control-btn" id="theme-toggle" title="Toggle Theme">
+                        <span class="control-icon" id="theme-icon">🌙</span>
+                        <span id="theme-label">Dark</span>
+                    </button>
+                    <div class="lang-selector">
+                        <select id="lang-select" title="Language">
+                            <option value="en">English</option>
+                            <option value="pt-BR">Português</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                            <option value="it">Italiano</option>
+                            <option value="ja">日本語</option>
+                            <option value="ko">한국어</option>
+                            <option value="zh-CN">中文</option>
+                            <option value="ru">Русский</option>
+                            <option value="ar">العربية</option>
+                            <option value="hi">हिन्दी</option>
+                            <option value="nl">Nederlands</option>
+                            <option value="tr">Türkçe</option>
+                            <option value="pl">Polski</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="status-indicator">
+                    <span class="status-dot" id="ws-status-dot"></span>
+                    <span id="ws-status-text">Connecting...</span>
+                </div>
+                <div class="user-info">
+                    <span class="uptime-label">Uptime:</span>
+                    <span id="uptime-display">--:--:--</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" id="menu-toggle">☰</button>
+                    <h1 class="page-title" id="page-title">Dashboard</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-status">
+                        <span class="status-badge" id="agent-status">● Ready</span>
+                        <span class="model-name" id="model-name">--</span>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" id="global-search" placeholder="Search... (Ctrl+K)">
+                    </div>
+                    <button class="icon-btn" id="notifications-btn" title="Notifications">
+                        🔔
+                        <span class="badge" id="notification-badge" style="display:none">0</span>
+                    </button>
+                    <button class="icon-btn" id="refresh-btn" title="Refresh Data">↻</button>
+                </div>
+            </header>
+
+            <!-- Page Content Container -->
+            <div class="page-content" id="page-content">
+                <!-- Dashboard Page -->
+                <div class="page active" id="page-dashboard">
+                    <div class="dashboard-grid">
+                        <!-- System Stats Cards -->
+                        <div class="card stat-card" id="cpu-card">
+                            <div class="card-header">
+                                <span class="card-icon">⚡</span>
+                                <span class="card-title" data-i18n="dashboard.cpu">CPU Usage</span>
+                            </div>
+                            <div class="stat-value" id="cpu-percent">--%</div>
+                            <div class="stat-detail" id="cpu-cores">-- cores</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="cpu-progress"></div>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card" id="ram-card">
+                            <div class="card-header">
+                                <span class="card-icon">💾</span>
+                                <span class="card-title" data-i18n="dashboard.memory">Memory</span>
+                            </div>
+                            <div class="stat-value" id="ram-percent">--%</div>
+                            <div class="stat-detail" id="ram-detail">-- / --</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="ram-progress"></div>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card" id="disk-card">
+                            <div class="card-header">
+                                <span class="card-icon">💿</span>
+                                <span class="card-title" data-i18n="dashboard.disk">Disk</span>
+                            </div>
+                            <div class="stat-value" id="disk-percent">--%</div>
+                            <div class="stat-detail" id="disk-detail">-- / --</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="disk-progress"></div>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card" id="network-card">
+                            <div class="card-header">
+                                <span class="card-icon">🌐</span>
+                                <span class="card-title" data-i18n="dashboard.network">Network</span>
+                            </div>
+                            <div class="stat-value" id="net-throughput">--</div>
+                            <div class="stat-detail" id="net-detail">↓ -- ↑ --</div>
+                            <div class="net-bars">
+                                <div class="net-bar-container">
+                                    <span class="net-label">RX</span>
+                                    <div class="net-bar"><div class="net-bar-fill" id="net-rx-bar"></div></div>
+                                </div>
+                                <div class="net-bar-container">
+                                    <span class="net-label">TX</span>
+                                    <div class="net-bar"><div class="net-bar-fill" id="net-tx-bar"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Token Throughput Chart -->
+                        <div class="card chart-card">
+                            <div class="card-header">
+                                <span class="card-icon">📈</span>
+                                <span class="card-title" data-i18n="dashboard.token_throughput">Token Throughput</span>
+                                <span class="badge live-badge" data-i18n="dashboard.live">LIVE</span>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="throughput-chart"></canvas>
+                            </div>
+                            <div class="chart-stats">
+                                <span id="tps-value">-- tok/s</span>
+                                <span id="total-tokens">-- total</span>
+                                <span id="avg-latency">-- ms avg</span>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="card activity-card">
+                            <div class="card-header">
+                                <span class="card-icon">📋</span>
+                                <span class="card-title" data-i18n="dashboard.recent_activity">Recent Activity</span>
+                            </div>
+                            <div class="activity-list" id="activity-list">
+                                <div class="activity-item">Loading...</div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Stats -->
+                        <div class="card quick-stats-card">
+                            <div class="card-header">
+                                <span class="card-icon">⚡</span>
+                                <span class="card-title" data-i18n="dashboard.quick_stats">Quick Stats</span>
+                            </div>
+                            <div class="quick-stats-grid">
+                                <div class="quick-stat">
+                                    <span class="quick-stat-value" id="stat-sessions">--</span>
+                                    <span class="quick-stat-label" data-i18n="dashboard.sessions">Sessions</span>
+                                </div>
+                                <div class="quick-stat">
+                                    <span class="quick-stat-value" id="stat-memories">--</span>
+                                    <span class="quick-stat-label" data-i18n="dashboard.memories">Memories</span>
+                                </div>
+                                <div class="quick-stat">
+                                    <span class="quick-stat-value" id="stat-decisions">--</span>
+                                    <span class="quick-stat-label">Decisions</span>
+                                </div>
+                                <div class="quick-stat">
+                                    <span class="quick-stat-value" id="stat-knowledge">--</span>
+                                    <span class="quick-stat-label">Knowledge</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Page -->
+                <div class="page" id="page-chat">
+                    <div class="chat-layout">
+                        <div class="chat-sidebar">
+                            <div class="module-selector">
+                                <label>Module Context</label>
+                                <select id="chat-module">
+                                    <option value="general" data-i18n="chat.module_general">General Assistant</option>
+                                    <option value="sales" data-i18n="chat.module_sales">Sales Strategist</option>
+                                    <option value="trading" data-i18n="chat.module_trading">Trading Analyst</option>
+                                </select>
+                            </div>
+                            <div class="session-list" id="session-list"></div>
+                            <button class="btn btn-secondary" id="new-chat-btn">+ New Chat</button>
+                        </div>
+                        <div class="chat-main">
+                            <div class="chat-messages" id="chat-messages">
+                                <div class="welcome-message">
+                                    <div class="welcome-icon">✦</div>
+                                    <h2 data-i18n="chat.welcome">Welcome to Mercatus</h2>
+                                    <p>Ask about sales strategies, trading analysis, or general advisory.</p>
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <div class="chat-input-wrapper">
+                                    <textarea id="chat-input" placeholder="Type your message... (Enter to send, Shift+Enter for newline)" rows="1"></textarea>
+                                    <button class="send-btn" id="send-btn">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="input-meta">
+                                    <span id="input-count">0/10000</span>
+                                    <span id="llm-status-badge">LLM: Checking...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Memory Page -->
+                <div class="page" id="page-memory">
+                    <div class="memory-layout">
+                        <div class="memory-filters">
+                            <div class="filter-group">
+                                <label>Type</label>
+                                <select id="memory-type-filter">
+                                    <option value="all">All</option>
+                                    <option value="episodic">Episodic</option>
+                                    <option value="semantic">Semantic</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label>Module</label>
+                                <select id="memory-module-filter">
+                                    <option value="all">All</option>
+                                    <option value="general">General</option>
+                                    <option value="sales">Sales</option>
+                                    <option value="trading">Trading</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label>Search</label>
+                                <input type="text" id="memory-search" placeholder="Search memories...">
+                            </div>
+                            <button class="btn btn-secondary" id="refresh-memories">Refresh</button>
+                        </div>
+                        <div class="memory-list" id="memory-list">
+                            <div class="loading-spinner">Loading memories...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decisions Page -->
+                <div class="page" id="page-decisions">
+                    <div class="decisions-layout">
+                        <div class="decisions-header">
+                            <h2>Decision History</h2>
+                            <div class="decision-filters">
+                                <select id="decision-module-filter">
+                                    <option value="all">All Modules</option>
+                                    <option value="general">General</option>
+                                    <option value="sales">Sales</option>
+                                    <option value="trading">Trading</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="decisions-list" id="decisions-list">
+                            <div class="loading-spinner">Loading decisions...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Knowledge Page -->
+                <div class="page" id="page-knowledge">
+                    <div class="knowledge-layout">
+                        <div class="knowledge-header">
+                            <h2>Knowledge Base</h2>
+                            <button class="btn btn-primary" id="add-knowledge-btn">+ Add Knowledge</button>
+                        </div>
+                        <div class="knowledge-filters">
+                            <input type="text" id="knowledge-search" placeholder="Search knowledge...">
+                            <select id="knowledge-category-filter">
+                                <option value="all">All Categories</option>
+                            </select>
+                        </div>
+                        <div class="knowledge-grid" id="knowledge-grid">
+                            <div class="loading-spinner">Loading knowledge...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Brain Map Page -->
+                <div class="page" id="page-brainmap">
+                    <div class="brainmap-layout">
+                        <div class="brainmap-toolbar">
+                            <h2 data-i18n="brain.title">Brain Map</h2>
+                            <div class="brainmap-controls">
+                                <input type="text" id="brain-search" placeholder="Search nodes..." class="brain-search-input">
+                                <select id="brain-filter" class="brain-filter-select">
+                                    <option value="all">All Types</option>
+                                    <option value="memory">Memories</option>
+                                    <option value="decision">Decisions</option>
+                                    <option value="knowledge">Knowledge</option>
+                                    <option value="conversation">Conversations</option>
+                                    <option value="session">Sessions</option>
+                                </select>
+                                <button class="btn btn-sm btn-secondary" id="brain-zoom-in">+</button>
+                                <button class="btn btn-sm btn-secondary" id="brain-zoom-out">−</button>
+                                <button class="btn btn-sm btn-secondary" id="brain-reset">Reset</button>
+                            </div>
+                        </div>
+                        <div class="brainmap-container">
+                            <canvas id="brainmap-canvas"></canvas>
+                        </div>
+                        <div class="brainmap-sidebar" id="brain-node-details">
+                            <p class="text-muted">Click a node to view details.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Page -->
+                <div class="page" id="page-analytics">
+                    <div class="analytics-layout">
+                        <div class="analytics-grid">
+                            <div class="card chart-card">
+                                <div class="card-header">
+                                    <span class="card-icon">💬</span>
+                                    <span class="card-title">Conversations</span>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="conversations-chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="card chart-card">
+                                <div class="card-header">
+                                    <span class="card-icon">🧠</span>
+                                    <span class="card-title">Memory Growth</span>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="memory-analytics-chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="card chart-card">
+                                <div class="card-header">
+                                    <span class="card-icon">📊</span>
+                                    <span class="card-title">Token Usage</span>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="tokens-chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="card stat-card">
+                                <div class="card-header">
+                                    <span class="card-icon">📈</span>
+                                    <span class="card-title">Analytics Summary</span>
+                                </div>
+                                <div class="analytics-summary" id="analytics-summary">
+                                    <div class="summary-item">
+                                        <span class="summary-label">Total Conversations</span>
+                                        <span class="summary-value" id="total-conversations">--</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Total Memories</span>
+                                        <span class="summary-value" id="total-memories-analytics">--</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Avg Confidence</span>
+                                        <span class="summary-value" id="avg-confidence">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs Page -->
+                <div class="page" id="page-logs">
+                    <div class="logs-layout">
+                        <div class="logs-header">
+                            <h2>System Logs</h2>
+                            <button class="btn btn-secondary" id="refresh-logs">Refresh</button>
+                        </div>
+                        <div class="logs-container" id="logs-container">
+                            <div class="loading-spinner">Loading logs...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Page -->
+                <div class="page" id="page-security">
+                    <div class="security-layout">
+                        <div class="security-grid">
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="card-icon">🔒</span>
+                                    <span class="card-title" data-i18n="security.brute_force">Brute Force Protection</span>
+                                </div>
+                                <div class="security-stats" id="brute-force-stats">
+                                    <div class="security-stat">
+                                        <span class="security-stat-value" id="bf-locked-count">0</span>
+                                        <span class="security-stat-label">Locked</span>
+                                    </div>
+                                    <div class="security-stat">
+                                        <span class="security-stat-value" id="bf-attempts">0</span>
+                                        <span class="security-stat-label">Tracked</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="card-icon">🌐</span>
+                                    <span class="card-title" data-i18n="security.ip_blocking">IP Blocking</span>
+                                </div>
+                                <div class="security-stats" id="ip-block-stats">
+                                    <div class="security-stat">
+                                        <span class="security-stat-value" id="blocked-ips">0</span>
+                                        <span class="security-stat-label">Blocked IPs</span>
+                                    </div>
+                                    <div class="security-stat">
+                                        <span class="security-stat-value" id="total-violations">0</span>
+                                        <span class="security-stat-label">Violations</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="card-icon">📋</span>
+                                    <span class="card-title" data-i18n="security.audit_log">Audit Log</span>
+                                </div>
+                                <div class="audit-log-container" id="audit-log-container">
+                                    <div class="loading-spinner">Loading audit log...</div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="card-icon">🔑</span>
+                                    <span class="card-title" data-i18n="security.active_sessions">Active Sessions</span>
+                                </div>
+                                <div class="sessions-container" id="sessions-container">
+                                    <div class="loading-spinner">Loading sessions...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrations Page -->
+                <div class="page" id="page-integrations">
+                    <div class="integrations-layout">
+                        <div class="integration-section">
+                            <h3>Webhooks</h3>
+                            <p>Register webhooks to receive events when chat, decisions, or memory changes occur.</p>
+                            <div class="integration-form">
+                                <input type="text" id="webhook-url" placeholder="https://your-webhook-url.com">
+                                <select id="webhook-events" multiple>
+                                    <option value="chat.created">Chat Created</option>
+                                    <option value="chat.response">Chat Response</option>
+                                    <option value="decision.made">Decision Made</option>
+                                    <option value="memory.created">Memory Created</option>
+                                </select>
+                                <button class="btn btn-primary" id="register-webhook-btn">Register Webhook</button>
+                            </div>
+                            <div id="webhooks-list" class="integration-list"></div>
+                        </div>
+
+                        <div class="integration-section">
+                            <h3>API Keys</h3>
+                            <div class="integration-form">
+                                <input type="text" id="api-key-name" placeholder="Key name">
+                                <select id="api-key-scopes" multiple>
+                                    <option value="chat">Chat</option>
+                                    <option value="decisions">Decisions</option>
+                                    <option value="memory.read">Memory Read</option>
+                                    <option value="memory.write">Memory Write</option>
+                                    <option value="knowledge.read">Knowledge Read</option>
+                                </select>
+                                <button class="btn btn-primary" id="generate-key-btn">Generate Key</button>
+                            </div>
+                            <div id="api-keys-list" class="integration-list"></div>
+                        </div>
+
+                        <div class="integration-section">
+                            <h3>Obsidian Vault</h3>
+                            <p>Export your agent data as an Obsidian vault (.zip) with markdown notes, wikilinks, and graph view.</p>
+                            <div class="integration-form">
+                                <button class="btn btn-primary" id="export-obsidian-btn">Export Vault</button>
+                                <button class="btn btn-secondary" id="sync-obsidian-btn">Sync Vault</button>
+                            </div>
+                            <div id="obsidian-status" class="integration-list"></div>
+                        </div>
+
+                        <div class="integration-section">
+                            <h3>External Connectors</h3>
+                            <div class="connectors-grid">
+                                <div class="connector-card" data-service="slack">
+                                    <span class="connector-icon">💬</span>
+                                    <span class="connector-name">Slack</span>
+                                    <button class="btn btn-sm btn-secondary connect-btn">Connect</button>
+                                </div>
+                                <div class="connector-card" data-service="discord">
+                                    <span class="connector-icon">🎮</span>
+                                    <span class="connector-name">Discord</span>
+                                    <button class="btn btn-sm btn-secondary connect-btn">Connect</button>
+                                </div>
+                                <div class="connector-card" data-service="telegram">
+                                    <span class="connector-icon">📱</span>
+                                    <span class="connector-name">Telegram</span>
+                                    <button class="btn btn-sm btn-secondary connect-btn">Connect</button>
+                                </div>
+                                <div class="connector-card" data-service="zapier">
+                                    <span class="connector-icon">⚡</span>
+                                    <span class="connector-name">Zapier</span>
+                                    <button class="btn btn-sm btn-secondary connect-btn">Connect</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Training Page -->
+                <div class="page" id="page-training">
+                    <div class="training-layout">
+                        <div class="training-section">
+                            <h3>Response Feedback</h3>
+                            <div class="feedback-stats" id="feedback-stats">
+                                <div class="feedback-stat">
+                                    <span class="feedback-stat-value" id="total-feedback">0</span>
+                                    <span class="feedback-stat-label">Total</span>
+                                </div>
+                                <div class="feedback-stat">
+                                    <span class="feedback-stat-value" id="avg-rating">0.0</span>
+                                    <span class="feedback-stat-label">Avg Rating</span>
+                                </div>
+                                <div class="feedback-stat">
+                                    <span class="feedback-stat-value" id="corrections-count">0</span>
+                                    <span class="feedback-stat-label">Corrections</span>
+                                </div>
+                            </div>
+                            <div class="feedback-history" id="feedback-history"></div>
+                        </div>
+                        <div class="training-section">
+                            <h3>Training Actions</h3>
+                            <div class="training-actions">
+                                <button class="btn btn-secondary" id="adapt-btn">Run Adaptation</button>
+                                <button class="btn btn-secondary" id="export-training-btn">Export Training Data</button>
+                            </div>
+                            <div id="adaptation-results" class="adaptation-results"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div class="page" id="page-settings">
+                    <div class="settings-layout">
+                        <div class="settings-section">
+                            <h3>LLM Configuration</h3>
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label>Base URL</label>
+                                    <input type="text" id="setting-llm-url" placeholder="http://localhost:11434/v1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Model</label>
+                                    <input type="text" id="setting-llm-model" placeholder="llama3.2">
+                                </div>
+                                <button class="btn btn-primary" id="test-llm-btn">Test Connection</button>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Memory Configuration</h3>
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label>Max Memories</label>
+                                    <input type="number" id="setting-max-memory" value="10000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Working Memory Size</label>
+                                    <input type="number" id="setting-working-memory" value="20">
+                                </div>
+                                <button class="btn btn-primary" id="vacuum-db-btn">Vacuum Database</button>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Backup & Restore</h3>
+                            <div class="settings-form">
+                                <button class="btn btn-secondary" id="backup-btn">Create Backup</button>
+                                <button class="btn btn-secondary" id="restore-btn">Restore from Backup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Container -->
+    <div class="modal-overlay" id="modal-overlay" style="display:none">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 id="modal-title">Modal</h3>
+                <button class="modal-close" id="modal-close">✕</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer" id="modal-footer"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/brainmap.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

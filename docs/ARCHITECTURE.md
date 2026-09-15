@@ -2,7 +2,7 @@
 
 ## System Overview
 
-Athena Agent v2.0 is a comprehensive AI agent platform with real-time monitoring, external integrations, and adaptive training capabilities.
+Mercatus Agent v2.0 is a comprehensive AI agent platform with real-time monitoring, external integrations, and adaptive training capabilities.
 
 ## Component Diagram
 
@@ -33,35 +33,35 @@ Athena Agent v2.0 is a comprehensive AI agent platform with real-time monitoring
 
 ## Modules
 
-### Core Layer (`src/athena/core/`)
-- **agent.py** — Main orchestrator (AthenaAgent)
+### Core Layer (`src/mercatus/core/`)
+- **agent.py** — Main orchestrator (MercatusAgent)
 - **memory.py** — Episodic, semantic, working memory management
 - **retrieval.py** — Context retrieval engine
 - **decision.py** — Decision evaluation engine
 
-### Integration Layer (`src/athena/integrations/`)
+### Integration Layer (`src/mercatus/integrations/`)
 - **webhooks.py** — Webhook registration and event dispatch
 - **api_keys.py** — API key lifecycle management
 - **connectors.py** — Slack, Discord, Telegram, Zapier connectors
 - **oauth.py** — OAuth flow for external services
 
-### Monitor Layer (`src/athena/monitor/`)
+### Monitor Layer (`src/mercatus/monitor/`)
 - **system.py** — CPU, RAM, disk, network metrics
 - **metrics.py** — Token throughput tracking
 
-### Training Layer (`src/athena/training/`)
+### Training Layer (`src/mercatus/training/`)
 - **feedback.py** — User feedback collection
 - **replay.py** — Session replay functionality
 - **adaptation.py** — Behavioral adaptation engine
 
-### Tools Layer (`src/athena/tools/`)
+### Tools Layer (`src/mercatus/tools/`)
 - **calculator.py** — Math/financial calculations
 - **converter.py** — Unit/currency conversion
 - **analyzer.py** — Text/data analysis
 - **scheduler.py** — Task scheduling
 - **notifier.py** — Multi-channel notifications
 
-### Server Layer (`src/athena/server/`)
+### Server Layer (`src/mercatus/server/`)
 - **api.py** — FastAPI REST endpoints
 - **websocket.py** — Real-time WebSocket handler
 - **static/** — Dashboard CSS/JS

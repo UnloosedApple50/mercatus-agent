@@ -1,5 +1,5 @@
 #!/bin/bash
-# Athena Agent Run Script
+# Mercatus Agent Run Script
 # Usage: ./scripts/run.sh [--host HOST] [--port PORT]
 
 set -e
@@ -10,8 +10,8 @@ if [ -f ".venv/bin/activate" ]; then
 fi
 
 # Default values
-HOST="${ATHENA_HOST:-0.0.0.0}"
-PORT="${ATHENA_PORT:-8585}"
+HOST="${MERCATUS_HOST:-0.0.0.0}"
+PORT="${MERCATUS_PORT:-8585}"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -31,7 +31,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 echo "╔══════════════════════════════════════════╗"
-echo "║        Athena Agent v1.0.0               ║"
+echo "║        Mercatus Agent v1.0.0               ║"
 echo "╠══════════════════════════════════════════╣"
 echo "║                                          ║"
 echo "║  Server: http://${HOST}:${PORT}            ║"
@@ -43,4 +43,4 @@ echo "╚═══════════════════════�
 echo ""
 
 # Run the server
-python3 -m athena run
+python3 -m mercatus run
