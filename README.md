@@ -19,6 +19,8 @@ curl -fsSL https://raw.githubusercontent.com/UnloosedApple50/mercatus-agent/main
 ### Option 2: Docker
 
 ```bash
+git clone https://github.com/UnloosedApple50/mercatus-agent.git
+cd mercatus-agent
 docker-compose up -d
 ```
 
@@ -35,11 +37,44 @@ python -m mercatus run
 
 ## Usage
 
-1. Open http://localhost:8585
+1. Open **http://localhost:8585** in your browser
 2. Start chatting with the agent
 3. Browse memory, decisions, and knowledge
 4. Export to Obsidian with one click
 5. Configure integrations (Slack, Discord, Telegram)
+
+## Troubleshooting
+
+### Can't access http://localhost:8585?
+
+1. **Check if server is running:**
+   ```bash
+   curl http://localhost:8585/api/v1/health
+   ```
+
+2. **Try your machine's IP:**
+   ```bash
+   # Get your IP
+   ipconfig getifaddr en0  # macOS
+   # Then access: http://YOUR_IP:8585
+   ```
+
+3. **Check firewall:**
+   - macOS: System Preferences → Security & Privacy → Firewall
+   - Windows: Allow Python through Windows Defender Firewall
+
+4. **Try different browser** (Chrome, Firefox, Safari)
+
+5. **Check terminal for errors** — the server will show error messages
+
+### Common Errors
+
+| Error | Solution |
+|-------|----------|
+| `Connection refused` | Server not running — start with `python -m mercatus run` |
+| `Address already in use` | Port 8585 occupied — change with `MERCATUS_PORT=9000 python -m mercatus run` |
+| `ModuleNotFoundError` | Run `pip install -e .` in the project directory |
+| LLM errors | Ollama not running — install from [ollama.ai](https://ollama.ai) or use rule-based fallback |
 
 ## System Requirements
 
