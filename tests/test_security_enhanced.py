@@ -203,7 +203,7 @@ class TestIPBlocker:
         blocker.record_violation("10.0.0.1")
         blocker.record_violation("10.0.0.1")
         # Different IP should not be blocked
-        blocked, _ = blocker.is_blocked("10.0.0.1")
+        blocked, _ = blocker.is_blocked("10.0.0.2")
         assert blocked is False
 
 
