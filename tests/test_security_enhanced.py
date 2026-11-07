@@ -163,45 +163,45 @@ class TestIPBlocker:
 
     def test_record_violation(self):
         blocker = IPBlocker(max_violations=3, block_duration=3600)
-        assert blocker.record_violation("192.168.1.1") is False
-        assert blocker.record_violation("192.168.1.1") is False
-        assert blocker.record_violation("192.168.1.1") is True  # Now blocked
+        assert blocker.record_violation("10.0.0.1") is False
+        assert blocker.record_violation("10.0.0.1") is False
+        assert blocker.record_violation("10.0.0.1") is True  # Now blocked
 
     def test_is_blocked(self):
         blocker = IPBlocker(max_violations=1, block_duration=3600)
-        blocker.record_violation("192.168.1.1")
-        blocked, retry_after = blocker.is_blocked("192.168.1.1")
+        blocker.record_violation("10.0.0.1")
+        blocked, retry_after = blocker.is_blocked("10.0.0.1")
         assert blocked is True
         assert retry_after > 0
 
     def test_is_not_blocked(self):
         blocker = IPBlocker(max_violations=10)
-        blocked, retry_after = blocker.is_blocked("192.168.1.1")
+        blocked, retry_after = blocker.is_blocked("10.0.0.1")
         assert blocked is False
         assert retry_after == 0
 
     def test_unblock(self):
         blocker = IPBlocker(max_violations=1, block_duration=3600)
-        blocker.record_violation("192.168.1.1")
-        assert blocker.unblock("192.168.1.1") is True
-        blocked, _ = blocker.is_blocked("192.168.1.1")
+        blocker.record_violation("10.0.0.1")
+        assert blocker.unblock("10.0.0.1") is True
+        blocked, _ = blocker.is_blocked("10.0.0.1")
         assert blocked is False
 
     def test_unblock_nonexistent(self):
         blocker = IPBlocker()
-        assert blocker.unblock("192.168.1.1") is False
+        assert blocker.unblock("10.0.0.1") is False
 
     def test_get_stats(self):
         blocker = IPBlocker(max_violations=1, block_duration=3600)
-        blocker.record_violation("192.168.1.1")
+        blocker.record_violation("10.0.0.1")
         stats = blocker.get_stats()
         assert stats["blocked_ips"] == 1
         assert stats["total_violations"] == 1
 
     def test_different_ips_independent(self):
         blocker = IPBlocker(max_violations=2, block_duration=3600)
-        blocker.record_violation("192.168.1.1")
-        blocker.record_violation("192.168.1.1")
+        blocker.record_violation("10.0.0.1")
+        blocker.record_violation("10.0.0.1")
         # Different IP should not be blocked
         blocked, _ = blocker.is_blocked("10.0.0.1")
         assert blocked is False
